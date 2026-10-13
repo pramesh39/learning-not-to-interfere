@@ -161,7 +161,7 @@ def main():
         final = {n: v.cpu() for n, v in merged_state(final=True).items()}
     state = {"domains": DOMAINS, "merge_weight": merge_weight.detach().cpu().tolist()}
     save_merged(final, a.output_dir, a.family,
-                extra_files={f"{a.method}_state.json": json.dumps(state)})
+                extra_files={f"{a.method}_state.json": json.dumps(state)}, base_model=a.base_model)
 
 
 if __name__ == "__main__":

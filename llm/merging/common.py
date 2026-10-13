@@ -42,15 +42,16 @@ def load_base_and_experts(family, experts, dtype, base_model=None):
     return base, expert_params
 
 
-def save_merged(params, out_dir, family, extra_files=None):
+def save_merged(params, out_dir, family, extra_files=None, base_model=None):
     """Write a loadable Hugging Face checkpoint in bfloat16.
 
     Weights are always stored in bfloat16, the dtype every evaluation loads
     them in. Merges computed in float16 (configs/models.yaml: merge_dtype) are
     cast here; casting at save time or at load time gives identical tensors.
-    Config, tokenizer and generation config come from the family's base model.
+    Config, tokenizer and generation config come from the base model that was
+    merged onto (`base_model`, default: the family's base on the Hub).
     """
-    base = family_cfg(family)["base"]
+    base = base_model or family_cfg(family)["base"]
     os.makedirs(out_dir, exist_ok=True)
     save_file({k: v.to(torch.bfloat16).contiguous() for k, v in params.items()},
               os.path.join(out_dir, "model.safetensors"), metadata={"format": "pt"})

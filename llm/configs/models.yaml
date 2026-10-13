@@ -37,6 +37,11 @@ families:
   gemma-2-9b-it:
     base: google/gemma-2-9b-it
     chat_template: gemma
+    # Known issue: the released Gemma safety completions were generated from
+    # Llama-3-formatted XSTest prompts. Generation keeps that template so it
+    # reproduces the released completions exactly. Set to `gemma` (or remove)
+    # to generate with Gemma's own template.
+    completions_chat_template: llama3
     merge_dtype: bfloat16     # Gemma-2 activations can overflow fp16
     experts:
       instruction:  MergeBench/gemma-2-9b-it_instruction

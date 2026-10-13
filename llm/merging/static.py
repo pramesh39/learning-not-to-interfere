@@ -125,7 +125,7 @@ def main():
     del experts
 
     for c in coefs:
-        save_merged(apply(base, delta, c), f"{a.output_dir}/{coef_name(c)}", a.family)
+        save_merged(apply(base, delta, c), f"{a.output_dir}/{coef_name(c)}", a.family, base_model=a.base_model)
 
 
 if __name__ == "__main__":

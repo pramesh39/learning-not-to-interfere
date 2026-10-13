@@ -67,7 +67,7 @@ def generate(family, domain, batch_size=8, device="cuda", expert_model=None, cha
     expert_model / chat_template override the family defaults (e.g. a local copy)."""
     fam = family_cfg(family)
     expert = expert_model or fam["experts"][domain]
-    template = chat_template or fam["chat_template"]
+    template = chat_template or fam.get("completions_chat_template", fam["chat_template"])
     prompts = full_prompts(domain, template)
     tok = load_tokenizer(expert)
     tok.padding_side = "left"
@@ -88,7 +88,8 @@ def generate(family, domain, batch_size=8, device="cuda", expert_model=None, cha
 
 def get_completions(family, domain, cache_dir, source="auto", batch_size=8):
     """source: 'auto' (local -> hub -> generate), 'local', 'hub' or 'generate'."""
-    template = family_cfg(family)["chat_template"]
+    fam = family_cfg(family)
+    template = fam.get("completions_chat_template", fam["chat_template"])
     path = _local_path(cache_dir, family, domain)
     if source in ("auto", "local") and os.path.exists(path):
         with open(path) as f:

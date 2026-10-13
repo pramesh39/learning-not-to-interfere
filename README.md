@@ -32,8 +32,8 @@ The base models ([`meta-llama/Llama-3.1-8B-Instruct`](https://huggingface.co/met
 ## Setup
 
 ```bash
-git clone --recursive https://github.com/pramesh39/resolving_interference.git
-cd resolving_interference
+git clone --recursive https://github.com/pramesh39/learning-not-to-interfere.git
+cd learning-not-to-interfere
 ```
 
 The three evaluation harnesses have incompatible dependencies, so each one gets its own conda environment.
@@ -155,7 +155,7 @@ To reproduce RI end to end rather than use the released experts, run `train_ri.s
 
 - **Expert completions.** The published completions are exactly the ones used to train the released RI experts, so the default (download) reproduces the paper's training data. Regenerating them runs the same procedure but will not match byte for byte, for two reasons:
   - The Llama-3.1 instruction, math and coding completions were taken from evaluation runs of the experts, and the MBPP+ ones were sampled at temperature 0.2. Regeneration decodes all domains greedily.
-  - The published Gemma-2 safety completions were generated from prompts formatted with the Llama-3 chat template. The generator in this repository uses each family's own template.
+  - **Known issue:** the published Gemma-2 safety completions were generated from XSTest prompts formatted with the Llama-3 chat template rather than Gemma's. RI training and evaluation use Gemma's template. Generation reproduces the published completions by default (`completions_chat_template` in `llm/configs/models.yaml`); this will be corrected in a future version.
 - **Adaptive merging.** AdaMerging and AdaRank are seeded here (`--seed`, default 0). The paper's runs were not seeded, so results can differ slightly from the reported numbers.
 - **Precision.** Merged checkpoints are written in bfloat16, the precision every evaluation loads them in. For Llama, Task Arithmetic, AdaMerging and AdaRank are computed in float16, as in the paper.
 
