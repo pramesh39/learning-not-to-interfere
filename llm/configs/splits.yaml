@@ -1,0 +1,40 @@
+# Validation / test partition of the five-benchmark subset.
+#
+# The first 100 examples of each benchmark's test set (in loader order) are
+# held out as VALIDATION and used only to select merging hyperparameters.
+# The remainder is the TEST partition, used for RI adaptation and for all
+# reported results. Indices are [start, end).
+#
+# ARC-ml is stratified by language instead of cut globally: a single global
+# cut would fall entirely inside German (the first language). The first 25
+# examples of each of de/es/fr/ru form the 100-example validation set.
+
+instruction:            # IFEval
+  total: 541
+  val:  {start: 0,   end: 100}
+  test: {start: 100, end: 541}
+
+math:                   # GSM8K
+  total: 1319
+  val:  {start: 0,   end: 100}
+  test: {start: 100, end: 1319}
+
+multilingual:           # ARC-ml
+  total: 4677
+  lang_order: [de, es, fr, ru]
+  lang_sizes: {de: 1169, es: 1170, fr: 1169, ru: 1169}
+  per_lang:
+    de: {val: {start: 0, end: 25}, test: {start: 25, end: 1169}}
+    es: {val: {start: 0, end: 25}, test: {start: 25, end: 1170}}
+    fr: {val: {start: 0, end: 25}, test: {start: 25, end: 1169}}
+    ru: {val: {start: 0, end: 25}, test: {start: 25, end: 1169}}
+
+coding:                 # MBPP+
+  total: 378
+  val:  {start: 0,   end: 100}
+  test: {start: 100, end: 378}
+
+safety:                 # XSTest
+  total: 450
+  val:  {start: 0,   end: 100}
+  test: {start: 100, end: 450}

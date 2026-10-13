@@ -1,0 +1,28 @@
+# Merging hyperparameters. Coefficient grids include both endpoints.
+
+task_arithmetic:
+  coefficients: {start: 0.05, stop: 1.0, step: 0.05}
+
+ties:
+  coefficients: {start: 0.1, stop: 1.0, step: 0.1}
+  top_k: 20            # percent of each task vector kept; fixed, not tuned
+
+tsvm:
+  coefficients: {start: 0.1, stop: 1.0, step: 0.1}
+
+# AdaMerging and AdaRank learn their coefficients by entropy minimisation on
+# unlabeled test-partition inputs, so there is nothing to grid-search.
+adamerging:
+  variant: ta          # layer-wise AdaMerging over task-arithmetic task vectors
+  prior: 0.3           # initial value of every layer-wise coefficient
+  lr: 1.0e-3
+  steps: 300
+  batch_size: 1
+  max_seq_length: 512
+
+adarank:
+  prior: 0.3
+  lr: 1.0e-3
+  steps: 300
+  batch_size: 1
+  max_seq_length: 512

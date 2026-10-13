@@ -1,0 +1,7 @@
+[submodule "third_party/safety-eval"]
+	path = third_party/safety-eval
+	url = https://github.com/pramesh39/safety-eval-fork.git
+	branch = ri-chat-templates
+[submodule "third_party/bigcode-evaluation-harness"]
+	path = third_party/bigcode-evaluation-harness
+	url = https://github.com/bigcode-project/bigcode-evaluation-harness.git

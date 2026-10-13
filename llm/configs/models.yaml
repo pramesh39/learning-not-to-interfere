@@ -1,0 +1,58 @@
+# Model families used in the paper's language-model experiments.
+#
+# base      : shared pretrained initialisation (theta_0) every expert was fine-tuned from
+# experts   : the original MergeBench domain experts
+# ri_experts: the RI-adapted experts released with this paper (500 RI steps each)
+#
+# merge_dtype applies to Task Arithmetic, AdaMerging and AdaRank. TIES and
+# TSV-M always merge in float32 and save bfloat16.
+#
+# micro_batch_size x grad_accum_steps = 32 effective batch for both families.
+# They differ only because Gemma-2-9B does not fit Llama's
+# micro-batch on a single 141 GB H200.
+
+domains: [instruction, math, multilingual, coding, safety]
+
+families:
+  llama-3.1-8b-instruct:
+    base: meta-llama/Llama-3.1-8B-Instruct
+    chat_template: llama3
+    merge_dtype: float16      # dtype for Task Arithmetic, AdaMerging and AdaRank (as in the paper)
+    experts:
+      instruction:  MergeBench/Llama-3.1-8B-Instruct_instruction
+      math:         MergeBench/Llama-3.1-8B-Instruct_math
+      multilingual: MergeBench/Llama-3.1-8B-Instruct_multilingual
+      coding:       MergeBench/Llama-3.1-8B-Instruct_coding
+      safety:       MergeBench/Llama-3.1-8B-Instruct_safety
+    ri_experts:
+      instruction:  hoffman-lab/Llama-3.1-8B-Instruct_instruction_RI
+      math:         hoffman-lab/Llama-3.1-8B-Instruct_math_RI
+      multilingual: hoffman-lab/Llama-3.1-8B-Instruct_multilingual_RI
+      coding:       hoffman-lab/Llama-3.1-8B-Instruct_coding_RI
+      safety:       hoffman-lab/Llama-3.1-8B-Instruct_safety_RI
+    ri:
+      micro_batch_size: 4
+      grad_accum_steps: 8
+
+  gemma-2-9b-it:
+    base: google/gemma-2-9b-it
+    chat_template: gemma
+    merge_dtype: bfloat16     # Gemma-2 activations can overflow fp16
+    experts:
+      instruction:  MergeBench/gemma-2-9b-it_instruction
+      math:         MergeBench/gemma-2-9b-it_math
+      multilingual: MergeBench/gemma-2-9b-it_multilingual
+      coding:       MergeBench/gemma-2-9b-it_coding
+      safety:       MergeBench/gemma-2-9b-it_safety
+    ri_experts:
+      instruction:  hoffman-lab/gemma-2-9b-it_instruction_RI
+      math:         hoffman-lab/gemma-2-9b-it_math_RI
+      multilingual: hoffman-lab/gemma-2-9b-it_multilingual_RI
+      coding:       hoffman-lab/gemma-2-9b-it_coding_RI
+      safety:       hoffman-lab/gemma-2-9b-it_safety_RI
+    ri:
+      micro_batch_size: 2
+      grad_accum_steps: 16
+
+# Published expert completions (distillation targets for the own-task loss).
+completions_repo: hoffman-lab/ri-expert-completions

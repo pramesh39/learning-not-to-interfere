@@ -1,0 +1,16 @@
+# MBPP+ via bigcode-evaluation-harness (third_party/bigcode-evaluation-harness).
+# After creating: pip install -e third_party/bigcode-evaluation-harness
+name: bigcode
+channels: [conda-forge]
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+      - torch==2.1.2
+      - transformers==4.46.3
+      - accelerate==1.14.0
+      - datasets==5.0.1
+      - evaluate==0.4.6
+      - safetensors==0.8.0
+      - numpy==1.24.1
+      - pyyaml==6.0.3
